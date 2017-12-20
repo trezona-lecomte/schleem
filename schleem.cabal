@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 965532c6524f0f31f89e8ffcda63bb80536fe5fa8bfcf45a87b22b0c79585ea2
+-- hash: 062242d36c50f11048b4eac999cc45d35d05329bb3245efb10f7d9479ca3693b
 
 name:           schleem
 version:        0.1.0.0
@@ -33,7 +33,9 @@ library
       base >=4.7 && <5
     , parsec
   exposed-modules:
+      Data
       Lib
+      Parser
   other-modules:
       Paths_schleem
   default-language: Haskell2010
