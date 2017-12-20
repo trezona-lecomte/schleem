@@ -33,6 +33,7 @@ parseExpr :: Parser SchleemVal
 parseExpr = parseString
             <|> parseAtom
             <|> parseNumber
+            <|> parseQuoted
             <|> do char '('
                    x <- try parseList <|> parseDottedList
                    char ')'
@@ -71,6 +72,13 @@ parseDottedList = do
   head <- parseExpr `endBy` spaces
   tail <- char '.' >> spaces >> parseExpr
   return $ DottedList head tail
+
+
+parseQuoted :: Parser SchleemVal
+parseQuoted = do
+  char '\''
+  x <- parseExpr
+  return $ List [Atom "quote", x]
 
 
 symbol :: Parser Char
