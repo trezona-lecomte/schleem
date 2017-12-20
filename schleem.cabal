@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9098086fb5d139763babff19a4d4eca42d39910e50e233d2d8b6c2ed46935068
+-- hash: 965532c6524f0f31f89e8ffcda63bb80536fe5fa8bfcf45a87b22b0c79585ea2
 
 name:           schleem
 version:        0.1.0.0
@@ -31,19 +31,21 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , parsec
   exposed-modules:
       Lib
   other-modules:
       Paths_schleem
   default-language: Haskell2010
 
-executable schleem-exe
+executable schleem
   main-is: Main.hs
   hs-source-dirs:
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , parsec
     , schleem
   other-modules:
       Paths_schleem
@@ -57,6 +59,7 @@ test-suite schleem-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , parsec
     , schleem
   other-modules:
       Paths_schleem

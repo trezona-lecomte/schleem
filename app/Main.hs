@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import Lib (schleem)
 
 main :: IO ()
-main = someFunc
+main = schleem

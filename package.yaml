@@ -21,12 +21,13 @@ description:         Please see the README on Github at <https://github.com/trez
 
 dependencies:
 - base >= 4.7 && < 5
+- parsec
 
 library:
   source-dirs: src
 
 executables:
-  schleem-exe:
+  schleem:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
