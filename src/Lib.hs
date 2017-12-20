@@ -2,7 +2,7 @@ module Lib
     ( schleem
     ) where
 
-import System.Environment
+import System.Environment (getArgs)
 import Text.ParserCombinators.Parsec hiding (spaces)
 
 
@@ -12,6 +12,7 @@ data SchleemVal = Atom String
                 | Number Integer
                 | String String
                 | Bool Bool
+                deriving (Show)
 
 
 
@@ -23,10 +24,15 @@ schleem = do
 
 readExpr :: String -> String
 readExpr input =
-  case parse (spaces >> symbol) "schleem" input of
+  case parse parseExpr "schleem" input of
     Right val -> "Found value: " ++ show val
     Left err -> "No match: " ++ show err
 
+
+parseExpr :: Parser SchleemVal
+parseExpr = parseString
+            <|> parseAtom
+            <|> parseNumber
 
 parseString :: Parser SchleemVal
 parseString = do
@@ -45,6 +51,10 @@ parseAtom = do
     "#t" -> Bool True
     "#f" -> Bool False
     _    -> Atom atom
+
+
+parseNumber :: Parser SchleemVal
+parseNumber = (Number . read) <$> many1 digit
 
 
 symbol :: Parser Char
