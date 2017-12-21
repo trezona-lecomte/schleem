@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a01917d4d6074069e97f069715a2454cd3753ba2fca943d2b5ae150f6fd38d6f
+-- hash: 9eca2759f287be9ddedde3fead480779d4ebe5638a720e0d1016c82a8037b60c
 
 name:           schleem
 version:        0.1.0.0
@@ -39,6 +39,7 @@ library
       Eval
       Lib
       Parser
+      REPL
   other-modules:
       Paths_schleem
   default-language: Haskell2010
