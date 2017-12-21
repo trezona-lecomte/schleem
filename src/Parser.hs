@@ -52,6 +52,7 @@ parseListOrDottedList = do
   _ <- char ')'
   return x
 
+
 parseList :: Parser SchleemVal
 parseList = List <$> parseExpr `sepBy` spaces
 
