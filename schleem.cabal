@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 14d63cca9d20698518c404b7b132a3353e498c50edf7e9b8987815beea32997a
+-- hash: a01917d4d6074069e97f069715a2454cd3753ba2fca943d2b5ae150f6fd38d6f
 
 name:           schleem
 version:        0.1.0.0
@@ -32,9 +32,11 @@ library
   ghc-options: -Wall
   build-depends:
       base >=4.7 && <5
+    , mtl
     , parsec
   exposed-modules:
       Data
+      Eval
       Lib
       Parser
   other-modules:
@@ -48,6 +50,7 @@ executable schleem
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , mtl
     , parsec
     , schleem
   other-modules:
@@ -62,6 +65,7 @@ test-suite schleem-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , mtl
     , parsec
     , schleem
   other-modules:

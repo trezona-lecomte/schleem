@@ -2,21 +2,23 @@ module Lib
     ( schleem
     ) where
 
+import Control.Monad.Error
 import System.Environment (getArgs)
 import Text.ParserCombinators.Parsec (parse)
 
+import Eval (eval)
 import Data
 import Parser (parseExpr)
 
 
 schleem :: IO ()
 schleem = do
-  (expr:_) <- getArgs
-  putStrLn $ readExpr expr
+  args <- getArgs
+  let evaluated = fmap show $ readExpr (head args) >>= eval
+  putStrLn $ extractValue $ trapError evaluated
 
-
-readExpr :: String -> String
+readExpr :: String -> ThrowsError SchleemVal
 readExpr input =
   case parse parseExpr "schleem" input of
-    Right val -> "Found value: " ++ show val
-    Left err -> "No match: " ++ show err
+    Right val -> return val
+    Left err -> throwError $ Parser err
