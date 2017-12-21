@@ -1,5 +1,6 @@
 module Eval where
 
+import Prelude hiding (last)
 import Control.Monad.Error
 
 import Data
@@ -22,6 +23,29 @@ eval badForm = throwError $ BadSpecialForm "Unrecognised special form" badForm
 apply :: String -> [SchleemVal] -> ThrowsError SchleemVal
 apply func args =
   maybe (throwError $ NotFunction "Unrecognised primitive function args" func) ($ args) (lookup func primitives)
+
+
+car :: [SchleemVal] -> ThrowsError SchleemVal
+car [List (x : _)] = return x
+car [DottedList (x : _) _] = return x
+car [badArg] = throwError $ TypeMismatch "pair" badArg
+car badArgList = throwError $ NumArgs 1 badArgList
+
+
+cdr :: [SchleemVal] -> ThrowsError SchleemVal
+cdr [List (_ : xs)] = return $ List xs
+cdr [DottedList [_] x] = return x
+cdr [DottedList (_ : xs) x] = return $ DottedList xs x
+cdr [badArg] = throwError $ TypeMismatch "pair" badArg
+cdr badArgList = throwError $ NumArgs 1 badArgList
+
+
+cons :: [SchleemVal] -> ThrowsError SchleemVal
+cons [x, List []] = return $ List [x]
+cons [x, List xs] = return $ List (x:xs)
+cons [x, DottedList xs last] = return $ DottedList (x:xs) last
+cons [x1, x2] = return $ DottedList [x1] x2
+cons badArgList = throwError $ NumArgs 2 badArgList
 
 
 primitives :: [(String, [SchleemVal] -> ThrowsError SchleemVal)]
