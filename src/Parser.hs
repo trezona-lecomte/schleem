@@ -12,10 +12,7 @@ parseExpr = parseString
             <|> parseAtom
             <|> parseNumber
             <|> parseQuoted
-            <|> do _ <- char '('
-                   x <- try parseList <|> parseDottedList
-                   _ <- char ')'
-                   return x
+            <|> parseListOrDottedList
 
 
 parseString :: Parser SchleemVal
@@ -41,6 +38,20 @@ parseNumber :: Parser SchleemVal
 parseNumber = (Number . read) <$> many1 digit
 
 
+parseQuoted :: Parser SchleemVal
+parseQuoted = do
+  _ <- char '\''
+  x <- parseExpr
+  return $ List [Atom "quote", x]
+
+
+parseListOrDottedList :: Parser SchleemVal
+parseListOrDottedList = do
+  _ <- char '('
+  x <- try parseList <|> parseDottedList
+  _ <- char ')'
+  return x
+
 parseList :: Parser SchleemVal
 parseList = List <$> parseExpr `sepBy` spaces
 
@@ -50,13 +61,6 @@ parseDottedList = do
   head <- parseExpr `endBy` spaces
   tail <- char '.' >> spaces >> parseExpr
   return $ DottedList head tail
-
-
-parseQuoted :: Parser SchleemVal
-parseQuoted = do
-  _ <- char '\''
-  x <- parseExpr
-  return $ List [Atom "quote", x]
 
 
 symbol :: Parser Char
