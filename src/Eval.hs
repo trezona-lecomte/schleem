@@ -10,6 +10,11 @@ eval val@(String _) = return val
 eval val@(Number _) = return val
 eval val@(Bool _) = return val
 eval (List [Atom "quote", val]) = return val
+eval (List [Atom "if", predicate, consequent, alternate]) = do
+  result <- eval predicate
+  case result of
+    Bool False -> eval alternate
+    _ -> eval consequent
 eval (List (Atom func : args)) = mapM eval args >>= apply func
 eval badForm = throwError $ BadSpecialForm "Unrecognised special form" badForm
 
