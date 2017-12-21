@@ -4,6 +4,7 @@ import Prelude hiding (last)
 import Control.Monad.Error
 
 import Data
+import State
 
 
 eval :: SchleemVal -> ThrowsError SchleemVal

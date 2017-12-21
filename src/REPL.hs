@@ -8,6 +8,7 @@ import Text.ParserCombinators.Parsec (parse)
 import Eval
 import Data
 import Parser
+import State
 
 
 repl :: IO ()

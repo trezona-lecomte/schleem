@@ -63,18 +63,4 @@ showError (NotFunction message func) = message ++ ": " ++ show func
 showError (UnboundVar message varName) = message ++ ": " ++ varName
 showError (Default message) = message
 
--- showError (Default message) =
-
-
--- Error Handling --------------------------------------------------------------
-
-type ThrowsError = Either SchleemError
-
-
-trapError :: ThrowsError String -> ThrowsError String
-trapError action = catchError action (return . show)
-
-
-extractValue :: ThrowsError a -> a
-extractValue (Right val) = val
-extractValue _ = error "extractValue must be used only after catchError"
+-- showError (Default message)
