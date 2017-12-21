@@ -1,5 +1,7 @@
 module Parser where
 
+import Prelude hiding (head, tail)
+
 import Text.ParserCombinators.Parsec hiding (spaces)
 
 import Data
@@ -10,17 +12,17 @@ parseExpr = parseString
             <|> parseAtom
             <|> parseNumber
             <|> parseQuoted
-            <|> do char '('
+            <|> do _ <- char '('
                    x <- try parseList <|> parseDottedList
-                   char ')'
+                   _ <- char ')'
                    return x
 
 
 parseString :: Parser SchleemVal
 parseString = do
-  char '"'
+  _ <- char '"'
   x <- many (noneOf "\"")
-  char '"'
+  _ <- char '"'
   return $ String x
 
 
@@ -52,7 +54,7 @@ parseDottedList = do
 
 parseQuoted :: Parser SchleemVal
 parseQuoted = do
-  char '\''
+  _ <- char '\''
   x <- parseExpr
   return $ List [Atom "quote", x]
 
