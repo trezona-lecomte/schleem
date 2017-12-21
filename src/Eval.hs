@@ -48,6 +48,25 @@ cons [x1, x2] = return $ DottedList [x1] x2
 cons badArgList = throwError $ NumArgs 2 badArgList
 
 
+eqv :: [SchleemVal] -> ThrowsError SchleemVal
+eqv [Bool arg1, Bool arg2] = return $ Bool $ arg1 == arg2
+eqv [Number arg1, Number arg2] = return $ Bool $ arg1 == arg2
+eqv [String arg1, String arg2] = return $ Bool $ arg1 == arg2
+eqv [Atom arg1, Atom arg2] = return $ Bool $ arg1 == arg2
+eqv [DottedList xs x, DottedList ys y] = eqv [List (xs ++ [x]), List (ys ++ [y])]
+eqv [List xs, List ys] =
+  return $ Bool $ (length xs == length ys) && all eqvPair (zip xs ys)
+  where eqvPair (x, y) =
+          case eqv [x, y] of
+            Right (Bool val) -> val
+            _ -> False
+eqv [_, _] = return $ Bool False
+eqv badArgList = throwError $ NumArgs 2 badArgList
+
+
+-- TODO: equal
+
+
 primitives :: [(String, [SchleemVal] -> ThrowsError SchleemVal)]
 primitives =
   [ ("+", numericBinop (+))
@@ -70,6 +89,11 @@ primitives =
   , ("string>?", strBoolBinop (>))
   , ("string<=?", strBoolBinop (<=))
   , ("string>=?", strBoolBinop (>=))
+  , ("car", car)
+  , ("cdr", cdr)
+  , ("cons", cons)
+  , ("eq?", eqv)
+  , ("eqv?", eqv)
   ]
 
 
